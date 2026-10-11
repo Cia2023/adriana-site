@@ -1494,7 +1494,11 @@ main,
   }
 
   .floating-invite {
-    animation: none;
+    animation: floating-heart-pulse 2.8s ease-in-out infinite !important;
+  }
+
+  .floating-invite > span {
+    animation: floating-heart-zoom-reduced 2.8s ease-in-out infinite !important;
   }
 
   .cloudinary-image {

@@ -33,7 +33,7 @@
     const messages = {
       'auth/invalid-email': 'O formato do email não é válido.',
       'auth/invalid-credential': 'Email ou palavra-passe incorretos.',
-      'auth/invalid-login-credentials': 'Email ou palavra-passe incorretos. Confirma que esta conta existe em Firebase Console → Authentication → Users no projeto adriana-site.',
+      'auth/invalid-login-credentials': 'Email ou palavra-passe incorretos.',
       'auth/user-not-found': 'Não existe uma conta Firebase com este email.',
       'auth/wrong-password': 'Email ou palavra-passe incorretos.',
       'auth/operation-not-allowed': 'O método Email/Password não está ativado em Firebase Authentication → Método de login.',
