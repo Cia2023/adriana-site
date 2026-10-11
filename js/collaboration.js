@@ -23,7 +23,7 @@
 
   function userFacingError(error, fallback) {
     const message = String(error?.message || '');
-    return /Apps Script|Cloudinary|planilha|aba |API|servidor|HTTP \d|publicação|respondeu a tempo|configuração|operação desconhecida|não está preparada|sessão terminou|já não está autorizada/i.test(message)
+    return /Apps Script|Cloudinary|planilha|aba |API|servidor|backend|HTTP \d|publicação|respondeu a tempo|configuração|operação desconhecida|não está preparada|sessão terminou|já não está autorizada|Firebase|token|UrlFetchApp|Identity Toolkit|FIREBASE_/i.test(message)
       ? fallback
       : message || fallback;
   }
@@ -34,33 +34,21 @@
       'auth/invalid-email': 'O formato do email não é válido.',
       'auth/invalid-credential': 'Email ou palavra-passe incorretos.',
       'auth/invalid-login-credentials': 'Email ou palavra-passe incorretos.',
-      'auth/user-not-found': 'Não existe uma conta Firebase com este email.',
+      'auth/user-not-found': 'Email ou palavra-passe incorretos.',
       'auth/wrong-password': 'Email ou palavra-passe incorretos.',
-      'auth/operation-not-allowed': 'O método Email/Password não está ativado em Firebase Authentication → Método de login.',
+      'auth/operation-not-allowed': 'Não foi possível iniciar sessão agora. Tenta novamente mais tarde.',
       'auth/too-many-requests': 'Muitas tentativas. Aguarda um pouco e tenta novamente.',
-      'auth/network-request-failed': 'Sem ligação ao Firebase. Verifica a internet e tenta novamente.'
+      'auth/network-request-failed': 'Sem ligação à internet. Verifica a ligação e tenta novamente.'
     };
     if (messages[code]) return messages[code];
-    if (window.FirebaseError && error === window.FirebaseError) return error.message;
-    if (error?.message) return error.message;
-    return code ? `Falha de autenticação Firebase (${code}).` : 'O Firebase não devolveu detalhes sobre a falha de autenticação.';
+    if (window.FirebaseError && error === window.FirebaseError) {
+      return 'O login não está disponível neste momento. Tenta novamente mais tarde.';
+    }
+    return 'Não foi possível iniciar sessão agora. Confirma os dados e tenta novamente.';
   }
 
-  function collaborationLoginErrorMessage(error) {
-    const message = String(error?.message || '').trim();
-    if (message.includes('FIREBASE_PROJECT_ID não configurado')) {
-      return 'A palavra-passe foi aceite, mas falta configurar FIREBASE_PROJECT_ID = adriana-site nas propriedades do Apps Script.';
-    }
-    if (message.includes('FIREBASE_API_KEY não configurada')) {
-      return 'A palavra-passe foi aceite, mas falta configurar FIREBASE_API_KEY nas propriedades do Apps Script com a chave web do projeto adriana-site.';
-    }
-    if (message.includes('Token inválido (aud)') || message.includes('Token inválido (iss)')) {
-      return 'A palavra-passe foi aceite, mas o Apps Script está configurado para outro projeto Firebase. Confirma FIREBASE_PROJECT_ID = adriana-site.';
-    }
-    if (message) {
-      return `O Firebase aceitou as credenciais, mas o Apps Script não validou a sessão. Detalhe: ${message}`;
-    }
-    return 'O Firebase aceitou as credenciais, mas o Apps Script não validou a sessão. Consulta a consola do navegador para ver o erro técnico.';
+  function collaborationLoginErrorMessage() {
+    return 'Não foi possível iniciar sessão agora. Tenta novamente mais tarde.';
   }
 
   function apiUrl() {
@@ -202,8 +190,8 @@
         const messages = {
           'auth/invalid-email': 'O formato do email não é válido.',
           'auth/too-many-requests': 'Muitas tentativas. Aguarda um pouco e tenta novamente.',
-          'auth/network-request-failed': 'Sem ligação ao Firebase. Verifica a internet e tenta novamente.',
-          'auth/operation-not-allowed': 'O método Email/Password não está ativado em Firebase Authentication → Método de login.'
+          'auth/network-request-failed': 'Sem ligação à internet. Verifica a ligação e tenta novamente.',
+          'auth/operation-not-allowed': 'Não foi possível pedir a reposição agora. Tenta novamente mais tarde.'
         };
         showNotice(notice, messages[error?.code] || userFacingError(error, 'Não foi possível pedir a reposição. Tenta novamente.'), true);
       }
@@ -234,7 +222,6 @@
           return;
         }
         const idToken = await credential.user.getIdToken();
-        showNotice(notice, 'Credenciais aceites. A confirmar a sessão com o servidor…');
         try {
           const verify = await apiRequest({ action: 'verifyFirebase', idToken: idToken });
           state.token = idToken;
@@ -246,7 +233,7 @@
           applyAccessState();
         } catch (error) {
           console.error('Firebase sign-in succeeded, but Apps Script session verification failed:', error);
-          showNotice(notice, collaborationLoginErrorMessage(error), true);
+          showNotice(notice, collaborationLoginErrorMessage(), true);
         }
       } catch (error) {
         console.error('Sign-in failed:', error);
