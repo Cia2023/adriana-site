@@ -410,6 +410,29 @@ button.text-link:focus-visible {
   font-size: 1.2rem;
 }
 
+.sheet-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheet-icon svg {
+  display: block;
+  width: 1.35em;
+  height: 1.35em;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.feature-icon .sheet-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.sheet-icon > span {
+  line-height: 1;
+}
+
 .gallery-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }

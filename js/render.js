@@ -24,6 +24,45 @@
     return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
   }
 
+  const namedIcons = {
+    heart: '♥',
+    sparkles: '✧',
+    'message-circle': '♡',
+    feather: '❧',
+    smile: '☺',
+    star: '★',
+    sun: '☼',
+    eye: '◉',
+    coffee: '☕',
+    clock: '◷',
+    flower: '❀',
+    target: '◎',
+    gift: '🎁',
+    compass: '✥',
+    music: '♫',
+    check: '✓',
+    cloud: '☁',
+    hourglass: '⌛',
+    gem: '◇',
+    flame: '♨',
+    shield: '⬡',
+    infinity: '∞',
+    crown: '♛',
+    'message-square': '▢',
+    award: '✹',
+    bookmark: '▮',
+    moon: '☾',
+    key: '⚿'
+  };
+
+  function iconMarkup(value, className) {
+    const icon = String(value || '').trim().toLowerCase();
+    if (!Object.prototype.hasOwnProperty.call(namedIcons, icon)) {
+      return `<i class="${className}" aria-hidden="true">✦</i>`;
+    }
+    return `<i class="${className}" data-lucide="${icon}" aria-hidden="true"><span>${namedIcons[icon]}</span></i>`;
+  }
+
   function safeUrl(value, base) {
     const target = String(value || '').trim();
     if (!target) return '';
@@ -191,7 +230,7 @@
               <article class="message-card reveal-card" data-category="${escapeHtml(item.categoria || 'Geral')}">
                 <div class="message-top">
                   <span class="tag">${escapeHtml(item.etiqueta || 'Mensagem')}</span>
-                  <span class="icon-badge">${escapeHtml(item.icone || '✦')}</span>
+                  <span class="icon-badge">${iconMarkup(item.icone, 'sheet-icon')}</span>
                 </div>
                 <h3>${escapeHtml(item.titulo || 'Mensagem')}</h3>
                 <p>${escapeHtml(item.texto || 'Sem texto definido ainda.')}</p>
@@ -328,7 +367,7 @@
         <div class="container details-grid">
           ${items.map((item) => `
             <article class="feature-card reveal-card">
-              <div class="feature-icon">${escapeHtml(item.icone || '✦')}</div>
+              <div class="feature-icon">${iconMarkup(item.icone, 'sheet-icon')}</div>
               <span class="tag">${escapeHtml(item.categoria || 'Detalhe')}</span>
               <h3>${escapeHtml(item.titulo || 'Detalhe')}</h3>
               <p>${escapeHtml(item.texto || 'Texto em destaque.')}</p>
@@ -464,6 +503,7 @@
     getConfigValue,
     orderItems,
     escapeHtml,
+    iconMarkup,
     cloudinaryUrl
   };
 })();

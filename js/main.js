@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       window.Renderer.renderPage(page, data[contentKey] || []);
     }
+    if (window.lucide) window.lucide.createIcons();
     window.Interactions.init();
     if (window.Collaboration) {
       window.Collaboration.init({ page });
