@@ -285,6 +285,10 @@
     app.querySelector('[data-login-sign-out]').addEventListener('click', signOut);
     app.querySelector('[data-sign-out]').addEventListener('click', signOut);
     app.querySelector('[data-chat-form]').addEventListener('submit', sendChatMessage);
+    app.querySelector('[data-chat-messages]').addEventListener('click', handleLightboxClick);
+    if (!document.querySelector('[data-image-lightbox]')) {
+      createLightbox('chat-image-lightbox', 'Fotografia da conversa');
+    }
   }
 
   function renderGalleryTools() {
@@ -452,13 +456,15 @@
     const time = date && !Number.isNaN(date.getTime())
       ? new Intl.DateTimeFormat('pt-PT', { dateStyle: 'short', timeStyle: 'short' }).format(date)
       : '';
-    const image = message.imageUrl ? cloudinaryUrl(message.imageUrl, 700) : '';
+    const image = message.imageUrl ? cloudinaryUrl(message.imageUrl, 320) : '';
+    const fullImage = message.imageUrl ? cloudinaryUrl(message.imageUrl, 1600) : '';
+    const imageAlt = `Imagem partilhada por ${message.authorName || 'utilizador'}`;
     return `
       <li class="chat-message${mine ? ' mine' : ''}">
         <div class="chat-bubble">
           <div class="chat-message-meta"><strong>${escapeHtml(message.authorName || 'Utilizador')}</strong><time>${escapeHtml(time)}</time></div>
           ${message.text ? `<p>${escapeHtml(message.text)}</p>` : ''}
-          ${image ? `<img class="chat-image" src="${escapeHtml(image)}" alt="Imagem partilhada por ${escapeHtml(message.authorName || 'utilizador')}" loading="lazy" />` : ''}
+          ${image ? `<button class="chat-image-open" type="button" data-lightbox-src="${escapeHtml(fullImage)}" data-lightbox-alt="${escapeHtml(imageAlt)}" aria-label="Ampliar fotografia"><img class="chat-image" src="${escapeHtml(image)}" alt="${escapeHtml(imageAlt)}" loading="lazy" /></button>` : ''}
         </div>
       </li>
     `;
@@ -784,11 +790,12 @@
     }
   }
 
-  function createLightbox() {
+  function createLightbox(className = 'gallery-lightbox', label = 'Fotografia ampliada') {
     const dialog = document.createElement('dialog');
-    dialog.className = 'gallery-lightbox';
+    dialog.className = className;
+    dialog.dataset.imageLightbox = '';
     dialog.dataset.galleryLightbox = '';
-    dialog.setAttribute('aria-label', 'Fotografia ampliada');
+    dialog.setAttribute('aria-label', label);
     dialog.innerHTML = `
       <button class="lightbox-close" type="button" data-close-lightbox aria-label="Fechar fotografia">×</button>
       <img alt="" data-lightbox-image />
@@ -805,7 +812,7 @@
 
   function openLightbox(src, alt) {
     if (!src) return;
-    const dialog = document.querySelector('[data-gallery-lightbox]');
+    const dialog = document.querySelector('[data-image-lightbox]');
     if (!dialog) return;
     const image = dialog.querySelector('[data-lightbox-image]');
     image.src = src;

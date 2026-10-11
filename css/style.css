@@ -1322,11 +1322,76 @@ body {
 }
 
 .chat-bubble img {
-  max-width: min(100%, 360px);
-  max-height: 420px;
-  margin-top: 10px;
+  display: block;
+  width: 148px;
+  height: 128px;
   border-radius: 12px;
+  object-fit: cover;
+}
+
+.chat-image-open {
+  display: block;
+  max-width: 100%;
+  margin-top: 10px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.chat-image-open:focus-visible {
+  outline: 3px solid var(--rose);
+  outline-offset: 3px;
+}
+
+.chat-image-lightbox {
+  position: fixed;
+  max-width: min(96vw, 1000px);
+  max-height: 94vh;
+  padding: clamp(18px, 4vw, 34px);
+  overflow: visible;
+  border: 3px double rgba(194, 24, 91, 0.55);
+  border-radius: 30px;
+  background: linear-gradient(145deg, #fffafd, #fce7ef 55%, #fff6fa);
+  box-shadow: 0 24px 80px rgba(82, 20, 46, 0.38), inset 0 0 0 6px rgba(255, 255, 255, 0.72);
+}
+
+.chat-image-lightbox::before,
+.chat-image-lightbox::after {
+  position: absolute;
+  z-index: 1;
+  color: var(--rose);
+  content: '♥';
+  font-size: 1.5rem;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(117, 33, 60, 0.2);
+}
+
+.chat-image-lightbox::before {
+  top: 8px;
+  left: 14px;
+}
+
+.chat-image-lightbox::after {
+  right: 14px;
+  bottom: 8px;
+}
+
+.chat-image-lightbox img {
+  display: block;
+  max-width: min(84vw, 900px);
+  max-height: calc(88vh - 48px);
+  border: 6px solid #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(117, 33, 60, 0.2);
   object-fit: contain;
+}
+
+.chat-image-lightbox::backdrop {
+  background: rgba(48, 17, 31, 0.78);
+  backdrop-filter: blur(8px);
 }
 
 .chat-compose {
@@ -1590,6 +1655,38 @@ main [hidden] {
 
   .chat-bubble {
     max-width: 92%;
+    padding: 10px 12px;
+    border-radius: 16px 16px 16px 5px;
+    box-shadow: 0 2px 8px rgba(117, 33, 60, 0.07);
+  }
+
+  .chat-message.mine .chat-bubble {
+    border-radius: 16px 16px 5px 16px;
+  }
+
+  .chat-message-meta {
+    gap: 4px 10px;
+    font-size: 0.7rem;
+  }
+
+  .chat-message-meta time {
+    font-size: 0.62rem;
+  }
+
+  .chat-bubble p {
+    margin-top: 5px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .chat-bubble img {
+    width: 112px;
+    height: 96px;
+  }
+
+  .chat-image-open {
+    margin-top: 7px;
+    border-radius: 10px;
   }
 
   .gallery-actions {
