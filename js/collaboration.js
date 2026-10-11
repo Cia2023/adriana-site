@@ -264,8 +264,11 @@
       <section class="page-content chat-area" data-chat-area hidden>
         <div class="container chat-shell glass-panel">
           <header class="chat-heading">
-            <div><span class="section-kicker">Conversa</span><h1>Chat</h1><p>Este espaço continua aqui para ti, sempre que precisares.</p></div>
-            <button class="text-link chat-sign-out" type="button" data-sign-out>Terminar sessão</button>
+            <button class="chat-sign-out" type="button" data-sign-out aria-label="Terminar sessão" title="Terminar sessão">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M10 17l5-5-5-5M15 12H3m9-8h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6" />
+              </svg>
+            </button>
           </header>
           <p class="collab-notice" data-chat-notice role="status" hidden></p>
           <ol class="chat-messages" data-chat-messages aria-live="polite"></ol>
