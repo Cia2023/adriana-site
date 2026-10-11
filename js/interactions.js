@@ -1,7 +1,7 @@
 (function () {
   function revealCards() {
     const elements = document.querySelectorAll('.reveal, .card, .message-card, .photo-card, .feature-card');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+    if (!('IntersectionObserver' in window)) {
       elements.forEach((element) => element.classList.add('reveal-item', 'visible'));
       return;
     }

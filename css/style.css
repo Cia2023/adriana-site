@@ -688,8 +688,6 @@ button.text-link:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   * {
-    animation: none !important;
-    transition: none !important;
     scroll-behavior: auto !important;
   }
 }
@@ -1510,9 +1508,10 @@ main,
     transform: none;
   }
 
-  .reveal-item {
-    opacity: 1;
+  .reveal-item,
+  .reveal-item.visible {
     transform: none;
+    transition: opacity 0.24s ease;
   }
 
   .photo-card:hover,
@@ -1527,7 +1526,8 @@ main,
   .feature-card.touch-active,
   .gallery-item.touch-active {
     transform: none;
-    box-shadow: 0 15px 35px rgba(194, 24, 91, 0.12);
+    border-color: rgba(255, 64, 129, 0.25);
+    box-shadow: 0 20px 40px rgba(194, 24, 91, 0.2);
   }
 }
 
