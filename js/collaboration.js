@@ -277,11 +277,11 @@
           <p class="collab-notice" data-chat-notice role="status" hidden></p>
           <ol class="chat-messages" data-chat-messages aria-live="polite"></ol>
           <form class="chat-compose" data-chat-form>
+            <label class="file-pick" for="chat-image" aria-label="Anexar fotografia" title="Anexar fotografia"><span aria-hidden="true">＋</span><span class="visually-hidden">Anexar fotografia</span></label>
+            <input id="chat-image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
             <label class="visually-hidden" for="chat-text">Escreve uma mensagem</label>
             <textarea id="chat-text" name="text" rows="2" maxlength="2000" placeholder="Escreve uma mensagem…" aria-label="Escreve uma mensagem"></textarea>
-            <label class="file-pick" for="chat-image">Anexar foto</label>
-            <input id="chat-image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
-            <button class="primary-btn" type="submit">Enviar</button>
+            <button class="primary-btn chat-send-button" type="submit" aria-label="Enviar mensagem" title="Enviar mensagem"><span aria-hidden="true">↑</span></button>
           </form>
         </div>
       </section>
@@ -371,7 +371,7 @@
     section.innerHTML = `
       <div class="container glass-panel gallery-collab-panel">
         <div class="gallery-collab-heading">
-          <div><span class="section-kicker">Biblioteca</span><h2>Partilha um vídeo ou áudio</h2><p>Cola um link completo TikTok, YouTube ou Vimeo, ou carrega um ficheiro. Links curtos do TikTok abrem no TikTok.</p></div>
+          <div><span class="section-kicker">Biblioteca</span><h2>Partilha um vídeo ou áudio</h2><p>Cola o link do vídeo ou áudio, ou escolhe um ficheiro para carregar.</p></div>
           <div class="gallery-actions">
             <button class="primary-btn" type="button" data-open-media-form>Adicionar conteúdo</button>
             <button class="text-link" type="button" data-media-sign-out hidden>Terminar sessão</button>
@@ -391,7 +391,7 @@
           <label>Título<input name="title" maxlength="120" required /></label>
           <label>Descrição<textarea name="caption" rows="2" maxlength="500"></textarea></label>
           <label>Categoria<input name="category" maxlength="60" required /></label>
-          <label data-media-url-label><span data-media-url-copy>Link do vídeo (TikTok, YouTube ou Vimeo)</span><input name="mediaUrl" type="url" inputmode="url" placeholder="https://www.tiktok.com/@.../video/..." /></label>
+          <label data-media-url-label><span data-media-url-copy>Link do vídeo</span><input name="mediaUrl" type="url" inputmode="url" placeholder="https://…" /></label>
           <label data-media-file-label><span data-media-file-copy>Ou carrega um ficheiro de vídeo</span><input name="mediaFile" type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime" /></label>
           <p class="collab-notice" data-media-upload-notice role="status" hidden></p>
           <div class="form-actions">
@@ -431,12 +431,12 @@
         ? 'Link direto para o PDF'
         : isAudio
           ? 'Link direto para o áudio'
-          : 'Link do vídeo (TikTok, YouTube ou Vimeo)';
+          : 'Link do vídeo';
       urlInput.placeholder = isEbook
         ? 'https://…/livro.pdf'
         : isAudio
           ? 'https://…/audio.mp3'
-          : 'https://www.tiktok.com/@.../video/...';
+          : 'https://…';
       section.querySelector('[data-media-file-copy]').textContent = isAudio
         ? 'Ou carrega um ficheiro de áudio'
         : 'Ou carrega um ficheiro de vídeo';

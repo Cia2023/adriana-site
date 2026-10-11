@@ -218,7 +218,7 @@
             </a>
             <a class="share-content-option" href="${escapeHtml(safeUrl(config.pageConfig.biblioteca))}">
               <strong>Adicionar à Biblioteca</strong>
-              <span>Partilha um link TikTok ou carrega um vídeo ou áudio.</span>
+              <span>Partilha um link ou carrega um vídeo ou áudio.</span>
             </a>
           </div>
         </div>
@@ -307,7 +307,7 @@
       if (/(^|\.)tiktok\.com$/i.test(url.hostname)) {
         const id = url.pathname.match(/^\/@[^/]+\/video\/(\d+)/)?.[1] ||
           url.pathname.match(/^\/(?:player\/v1|embed\/v2)\/(\d+)/)?.[1];
-        return id ? `https://www.tiktok.com/player/v1/${encodeURIComponent(id)}?controls=1&description=1` : '';
+        return id ? `https://www.tiktok.com/player/v1/${encodeURIComponent(id)}?controls=1&description=0` : '';
       }
       if (url.hostname === 'youtu.be') {
         const id = url.pathname.split('/').filter(Boolean)[0];
@@ -365,8 +365,7 @@
       } else if (mediaUrl && isDirectVideoUrl(mediaUrl)) {
         player = `<div class="media-player media-video"><video controls playsinline preload="metadata"${cover ? ` poster="${escapeHtml(cloudinaryUrl(cover, 900))}"` : ''}><source src="${escapeHtml(mediaUrl)}" /></video></div>`;
       } else if (mediaUrl) {
-        const isTikTok = isTikTokUrl(mediaUrl);
-        player = `<div class="media-link-player"><p>${isTikTok ? 'Este link abre o vídeo no TikTok.' : 'Este formato abre no site onde o vídeo está publicado.'}</p><a class="primary-btn media-open" href="${escapeHtml(mediaUrl)}" target="_blank" rel="noopener noreferrer">${isTikTok ? 'Ver no TikTok' : 'Abrir vídeo'}</a></div>`;
+        player = `<div class="media-link-player"><a class="primary-btn media-open" href="${escapeHtml(mediaUrl)}" target="_blank" rel="noopener noreferrer">Abrir vídeo</a></div>`;
       }
     } else if (['audio', 'áudio', 'audios', 'áudios'].includes(type) && mediaUrl) {
       player = `${cover ? imageMarkup(cover, item.titulo, 700, 'lazy', 'media-cover') : ''}<audio controls preload="metadata"><source src="${escapeHtml(mediaUrl)}" /></audio>`;
@@ -381,8 +380,7 @@
         <div class="media-card-copy">
           ${item.categoria ? `<span class="tag">${escapeHtml(item.categoria)}</span>` : ''}
           <h2>${title}</h2>
-          ${description ? `<p>${escapeHtml(description)}</p>` : ''}
-          ${isTikTokUrl(mediaUrl) && videoEmbedUrl(mediaUrl) ? `<a class="text-link" href="${escapeHtml(mediaUrl)}" target="_blank" rel="noopener noreferrer">Se o vídeo não carregar, abrir no TikTok</a>` : ''}
+          ${description ? `<details class="media-description"><summary>Descrição</summary><p>${escapeHtml(description)}</p></details>` : ''}
         </div>
       </article>
     `;
@@ -396,7 +394,7 @@
         <div class="container narrow">
           <span class="section-kicker">Vídeos, áudios e leituras</span>
           <h1>Biblioteca</h1>
-          <p>Um espaço para ver, ouvir e descobrir. Também podes partilhar um link TikTok ou carregar um vídeo, áudio ou e-book.</p>
+          <p>Um espaço para ver, ouvir e descobrir. Também podes partilhar um link ou carregar um vídeo, áudio ou e-book.</p>
           <a class="text-link contribution-jump" href="#library-contributions">Adicionar conteúdo à Biblioteca</a>
         </div>
       </section>
