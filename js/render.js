@@ -326,7 +326,7 @@
         const embed = new URL('https://www.facebook.com/plugins/video.php');
         embed.searchParams.set('href', safe);
         embed.searchParams.set('show_text', 'false');
-        embed.searchParams.set('width', '500');
+        embed.searchParams.set('width', url.pathname.startsWith('/reel/') ? '320' : '500');
         return embed.href;
       }
       if (/(^|\.)instagram\.com$/i.test(url.hostname)) {
@@ -380,6 +380,17 @@
     }
   }
 
+  function isFacebookReelUrl(value) {
+    const safe = safeUrl(value);
+    if (!safe) return false;
+    try {
+      const url = new URL(safe);
+      return /(^|\.)facebook\.com$/i.test(url.hostname) && /^\/reel\//i.test(url.pathname);
+    } catch (error) {
+      return false;
+    }
+  }
+
   function renderMediaItem(item) {
     const type = String(item.tipo || '').trim().toLowerCase();
     const title = escapeHtml(item.titulo || 'Conteúdo');
@@ -391,8 +402,8 @@
     if (['video', 'vídeo', 'videos', 'vídeos'].includes(type)) {
       const embed = videoEmbedUrl(mediaUrl);
       if (embed) {
-        const portraitVideo = isTikTokUrl(mediaUrl) || isInstagramReelUrl(mediaUrl);
-        player = `<div class="media-player media-video${portraitVideo ? ' media-tiktok-video' : ''}"><iframe src="${escapeHtml(embed)}" title="${title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+        const portraitVideo = isTikTokUrl(mediaUrl) || isInstagramReelUrl(mediaUrl) || isFacebookReelUrl(mediaUrl);
+        player = `<div class="media-player media-video${portraitVideo ? ' media-portrait-video' : ''}"><iframe src="${escapeHtml(embed)}" title="${title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
       } else if (mediaUrl && isDirectVideoUrl(mediaUrl)) {
         player = `<div class="media-player media-video"><video controls playsinline preload="metadata"${cover ? ` poster="${escapeHtml(cloudinaryUrl(cover, 900))}"` : ''}><source src="${escapeHtml(mediaUrl)}" /></video></div>`;
       } else if (mediaUrl) {

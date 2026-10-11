@@ -2003,7 +2003,7 @@ main,
   aspect-ratio: 16 / 9;
 }
 
-.media-video.media-tiktok-video {
+.media-video.media-portrait-video {
   width: min(100%, 420px, calc(80vh * 9 / 16));
   aspect-ratio: 9 / 16;
   margin-inline: auto;
