@@ -1,0 +1,42 @@
+.reveal-item {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-item.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: rotate(-45deg) scale(1); }
+  50% { transform: rotate(-45deg) scale(1.08); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating-element {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes heart-double-pulse {
+  0%, 100% { transform: rotate(-45deg) scale(0.94); }
+  12% { transform: rotate(-45deg) scale(1.06); }
+  24% { transform: rotate(-45deg) scale(0.98); }
+  36% { transform: rotate(-45deg) scale(1.12); }
+  52% { transform: rotate(-45deg) scale(0.94); }
+}
+
+@keyframes loader-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes floating-heart-pulse {
+  0%, 100% { box-shadow: 0 12px 30px rgba(194, 24, 91, 0.3); }
+  50% { box-shadow: 0 12px 38px rgba(194, 24, 91, 0.48), 0 0 0 8px rgba(255, 64, 129, 0.08); }
+}

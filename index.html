@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uma História Que Ainda Está a Começar</title>
+    <meta name="description" content="Uma pequena surpresa para Adriana Pedro." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/animations.css" />
+  </head>
+  <body data-page="home">
+    <div class="loader" aria-live="polite" aria-label="Carregando conteúdo">
+      <div class="heart"></div>
+    </div>
+
+    <header class="site-header">
+      <div class="container nav-container">
+        <a class="brand" href="./index.html" data-app-title>Adriana Pedro</a>
+        <nav id="site-nav" class="site-nav" aria-label="Menu de navegação"></nav>
+      </div>
+    </header>
+
+    <div id="sheet-status" class="sheet-status container" role="status" hidden>
+      <span data-status-message></span>
+      <button id="refresh-content" type="button" class="text-link">Tentar novamente</button>
+    </div>
+
+    <main id="app"></main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>Feito com carinho • <span data-year></span></p>
+      </div>
+    </footer>
+
+    <script src="./js/config.js"></script>
+    <script src="./js/csv-parser.js"></script>
+    <script src="./js/sheets.js"></script>
+    <script src="./js/navigation.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/interactions.js"></script>
+    <script src="./js/firebase-init.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
