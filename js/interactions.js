@@ -232,5 +232,8 @@
     bindHeroParallax();
   }
 
-  window.Interactions = { init };
+  window.Interactions = {
+    init,
+    refreshReveals: revealCards
+  };
 })();

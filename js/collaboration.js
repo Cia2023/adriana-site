@@ -33,6 +33,7 @@
     const messages = {
       'auth/invalid-email': 'O formato do email não é válido.',
       'auth/invalid-credential': 'Email ou palavra-passe incorretos.',
+      'auth/invalid-login-credentials': 'Email ou palavra-passe incorretos. Confirma que esta conta existe em Firebase Console → Authentication → Users no projeto adriana-site.',
       'auth/user-not-found': 'Não existe uma conta Firebase com este email.',
       'auth/wrong-password': 'Email ou palavra-passe incorretos.',
       'auth/too-many-requests': 'Muitas tentativas. Aguarda um pouco e tenta novamente.',
@@ -142,7 +143,7 @@
   function loginMarkup() {
     return `
       <section class="page-content">
-        <form class="collab-login glass-panel" data-login-form>
+        <form class="collab-login glass-panel reveal" data-login-form>
           <h2>Entrar para continuar</h2>
           <label>Email<input name="email" type="email" autocomplete="username" required maxlength="254" /></label>
           <label>Palavra-passe<input name="password" type="password" autocomplete="current-password" required maxlength="256" /></label>
@@ -205,7 +206,7 @@
     const app = document.querySelector('#app');
     app.innerHTML = `
       <section class="page-content chat-welcome">
-        <div class="container narrow glass-panel chat-welcome-panel">
+        <div class="container narrow glass-panel chat-welcome-panel reveal">
           <span class="section-kicker">Um espaço teu</span>
           <h1>Podes voltar aqui todos os dias</h1>
           <p>Podes desabafar, chorar ou simplesmente ficar em silêncio — sem medo e sem julgamentos. Quero que saibas que estarei aqui, todos os dias.</p>
@@ -231,6 +232,7 @@
       </section>
     `;
 
+    window.Interactions.refreshReveals();
     configureLogin(app.querySelector('[data-login-form]'), app.querySelector('[data-login-notice]'));
     app.querySelector('[data-login-sign-out]').addEventListener('click', signOut);
     app.querySelector('[data-sign-out]').addEventListener('click', signOut);
