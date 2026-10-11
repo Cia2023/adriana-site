@@ -427,9 +427,11 @@
                   <h3>${escapeHtml(item.titulo || 'Descoberta')}</h3>
                   <p>${escapeHtml(item.texto || 'Uma frase escondida.')}</p>
                   ${imageMarkup(item.url_imagem, item.titulo, 900, 'lazy')}
+                  <span class="flip-card-prompt">Toca para revelar</span>
                 </div>
                 <div class="flip-card-back">
                   <p data-hidden-message>${escapeHtml(item.mensagem_revelada || 'Mensagem revelada com carinho.')}</p>
+                  <span class="flip-card-prompt">Toca para voltar</span>
                 </div>
               </div>
             </article>
