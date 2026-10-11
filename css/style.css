@@ -1311,6 +1311,9 @@ body {
 
 .gallery-image-button img {
   width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
 }
 
 .gallery-lightbox {
@@ -1552,6 +1555,11 @@ main,
     border-color: rgba(255, 64, 129, 0.25);
     box-shadow: 0 20px 40px rgba(194, 24, 91, 0.2);
   }
+}
+
+.gallery-item:hover img,
+.gallery-item.touch-active img {
+  transform: none;
 }
 
 @media (max-width: 600px) {
