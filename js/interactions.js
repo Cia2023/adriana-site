@@ -49,6 +49,9 @@
     envelope.addEventListener('click', () => {
       const isOpen = envelope.classList.toggle('opened');
       envelope.setAttribute('aria-expanded', String(isOpen));
+      envelope.setAttribute('aria-label', isOpen ? 'Fechar carta' : 'Abrir carta');
+      const prompt = envelope.querySelector('[data-envelope-prompt]');
+      if (prompt) prompt.textContent = isOpen ? 'Fechar carta' : 'Abrir carta';
       const letter = document.querySelector('.letter-content');
       if (letter) {
         letter.classList.toggle('visible', isOpen);

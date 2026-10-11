@@ -390,8 +390,9 @@
       </section>
       <section class="page-content reveal">
         <div class="container letter-shell">
-          <button class="letter-envelope" type="button" aria-label="Abrir carta">
+          <button class="letter-envelope" type="button" aria-label="Abrir carta" aria-expanded="false">
             <span class="envelope-top"></span>
+            <span class="envelope-prompt" data-envelope-prompt>Abrir carta</span>
             <span class="envelope-name">${escapeHtml(recipient)}</span>
           </button>
           <article class="letter-content">

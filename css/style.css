@@ -501,6 +501,31 @@ button.text-link:focus-visible {
   color: var(--wine);
 }
 
+.envelope-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 9px 18px;
+  border: 1px solid rgba(117, 33, 60, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--wine);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transform: translate(-50%, -50%);
+}
+
+.letter-envelope:hover .envelope-prompt,
+.letter-envelope:focus-visible .envelope-prompt {
+  background: var(--wine);
+  color: #fff;
+}
+
+.letter-envelope:focus-visible {
+  outline: 3px solid var(--rose);
+  outline-offset: 4px;
+}
+
 .letter-content {
   max-width: 780px;
   width: 100%;
