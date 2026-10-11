@@ -1139,20 +1139,6 @@ body {
   left: 9px;
 }
 
-.chat-welcome-panel {
-  display: grid;
-  gap: 10px;
-  padding: clamp(20px, 5vw, 36px);
-}
-
-.chat-welcome-panel h1 {
-  margin: 0;
-  color: var(--wine);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 6vw, 3rem);
-}
-
-.chat-welcome-panel p,
 .chat-heading p {
   margin: 0;
   color: var(--ink);
@@ -1264,6 +1250,13 @@ body {
   color: var(--wine);
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.5rem;
+}
+
+.chat-sign-out {
+  min-height: 36px !important;
+  padding: 6px 10px !important;
+  font-size: 0.78rem !important;
+  white-space: nowrap;
 }
 
 .chat-messages {

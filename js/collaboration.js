@@ -260,19 +260,12 @@
   function renderChat() {
     const app = document.querySelector('#app');
     app.innerHTML = `
-      <section class="page-content chat-welcome">
-        <div class="container narrow glass-panel chat-welcome-panel reveal">
-          <span class="section-kicker">Um espaço teu</span>
-          <h1>Podes voltar aqui todos os dias</h1>
-          <p>Podes escrever uma mensagem ou anexar uma fotografia. Se preferires, também podes partilhar fotografias na <a href="../pages/galeria.html">Galeria</a> ou vídeos e áudios na <a href="../pages/biblioteca.html">Biblioteca</a>.</p>
-        </div>
-      </section>
       ${loginMarkup()}
       <section class="page-content chat-area" data-chat-area hidden>
         <div class="container chat-shell glass-panel">
           <header class="chat-heading">
             <div><span class="section-kicker">Conversa</span><h1>Chat</h1><p>Este espaço continua aqui para ti, sempre que precisares.</p></div>
-            <button class="text-link" type="button" data-sign-out>Terminar sessão</button>
+            <button class="text-link chat-sign-out" type="button" data-sign-out>Terminar sessão</button>
           </header>
           <p class="collab-notice" data-chat-notice role="status" hidden></p>
           <ol class="chat-messages" data-chat-messages aria-live="polite"></ol>
