@@ -1218,24 +1218,27 @@ body {
 }
 
 .chat-area {
+  height: calc(100svh - 92px);
+  min-height: 360px;
   padding-top: 0;
 }
 
 .chat-shell {
   display: grid;
   width: min(var(--container), calc(100% - 32px));
-  min-height: min(74vh, 760px);
+  height: min(100%, 760px);
+  min-height: 0;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
-  gap: 18px;
+  gap: 10px;
   margin: 0 auto;
-  padding: clamp(18px, 4vw, 34px);
+  padding: 10px clamp(12px, 2vw, 20px);
 }
 
 .chat-heading,
 .gallery-collab-heading {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 20px;
 }
 
@@ -1253,10 +1256,36 @@ body {
 }
 
 .chat-sign-out {
-  min-height: 36px !important;
-  padding: 6px 10px !important;
-  font-size: 0.78rem !important;
-  white-space: nowrap;
+  display: grid;
+  width: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  place-items: center;
+  padding: 8px;
+  border: 1px solid rgba(117, 33, 60, 0.12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--wine);
+  cursor: pointer;
+}
+
+.chat-sign-out svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.chat-sign-out:hover {
+  background: rgba(212, 34, 88, 0.1);
+}
+
+.chat-sign-out:focus-visible {
+  outline: 3px solid rgba(255, 64, 129, 0.32);
+  outline-offset: 2px;
 }
 
 .chat-messages {
@@ -1265,7 +1294,6 @@ body {
   flex-direction: column;
   gap: 14px;
   min-height: 0;
-  max-height: 55vh;
   overflow: auto;
   margin: 0;
   padding: 20px;
@@ -1633,24 +1661,20 @@ main [hidden] {
 }
 
 @media (max-width: 520px) {
+  .chat-area {
+    height: calc(100svh - 150px);
+    min-height: 260px;
+    padding: 0;
+  }
+
   .chat-shell {
-    width: calc(100% - 20px);
-    gap: 12px;
-    min-height: 0;
-    padding: 14px;
-  }
-
-  .chat-heading {
-    align-items: flex-start;
-  }
-
-  .chat-heading p {
-    display: none;
+    width: calc(100% - 16px);
+    gap: 8px;
+    padding: 8px;
   }
 
   .chat-messages {
-    max-height: 30svh;
-    padding: 12px;
+    padding: 10px;
   }
 
   .chat-bubble {
@@ -2031,7 +2055,7 @@ main,
 
   .chat-messages {
     min-height: 24svh;
-    max-height: 30svh;
+    max-height: none;
     overscroll-behavior-y: contain;
     -webkit-overflow-scrolling: touch;
   }
