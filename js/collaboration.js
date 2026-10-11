@@ -42,7 +42,25 @@
     };
     if (messages[code]) return messages[code];
     if (window.FirebaseError && error === window.FirebaseError) return error.message;
-    return userFacingError(error, 'Não foi possível entrar. Verifica os dados e tenta novamente.');
+    if (error?.message) return error.message;
+    return code ? `Falha de autenticação Firebase (${code}).` : 'O Firebase não devolveu detalhes sobre a falha de autenticação.';
+  }
+
+  function collaborationLoginErrorMessage(error) {
+    const message = String(error?.message || '').trim();
+    if (message.includes('FIREBASE_PROJECT_ID não configurado')) {
+      return 'A palavra-passe foi aceite, mas falta configurar FIREBASE_PROJECT_ID = adriana-site nas propriedades do Apps Script.';
+    }
+    if (message.includes('FIREBASE_API_KEY não configurada')) {
+      return 'A palavra-passe foi aceite, mas falta configurar FIREBASE_API_KEY nas propriedades do Apps Script com a chave web do projeto adriana-site.';
+    }
+    if (message.includes('Token inválido (aud)') || message.includes('Token inválido (iss)')) {
+      return 'A palavra-passe foi aceite, mas o Apps Script está configurado para outro projeto Firebase. Confirma FIREBASE_PROJECT_ID = adriana-site.';
+    }
+    if (message) {
+      return `O Firebase aceitou as credenciais, mas o Apps Script não validou a sessão. Detalhe: ${message}`;
+    }
+    return 'O Firebase aceitou as credenciais, mas o Apps Script não validou a sessão. Consulta a consola do navegador para ver o erro técnico.';
   }
 
   function apiUrl() {
@@ -207,16 +225,29 @@
         if (!auth) throw window.FirebaseError || new Error('O Firebase não foi inicializado.');
         const email = form.elements.email.value.trim();
         const password = form.elements.password.value;
-        const credential = await auth.signInWithEmailAndPassword(email, password);
+        let credential;
+        try {
+          credential = await auth.signInWithEmailAndPassword(email, password);
+        } catch (error) {
+          console.error('Firebase rejected the sign-in credentials:', error);
+          showNotice(notice, loginErrorMessage(error), true);
+          return;
+        }
         const idToken = await credential.user.getIdToken();
-        const verify = await apiRequest({ action: 'verifyFirebase', idToken: idToken });
-        state.token = idToken;
-        state.user = verify.user;
-        state.approved = true;
-        sessionStorage.setItem(SESSION_KEY, state.token);
-        form.reset();
-        showNotice(notice, '');
-        applyAccessState();
+        showNotice(notice, 'Credenciais aceites. A confirmar a sessão com o servidor…');
+        try {
+          const verify = await apiRequest({ action: 'verifyFirebase', idToken: idToken });
+          state.token = idToken;
+          state.user = verify.user;
+          state.approved = true;
+          sessionStorage.setItem(SESSION_KEY, state.token);
+          form.reset();
+          showNotice(notice, '');
+          applyAccessState();
+        } catch (error) {
+          console.error('Firebase sign-in succeeded, but Apps Script session verification failed:', error);
+          showNotice(notice, collaborationLoginErrorMessage(error), true);
+        }
       } catch (error) {
         console.error('Sign-in failed:', error);
         showNotice(notice, loginErrorMessage(error), true);

@@ -298,6 +298,40 @@ main {
   font-weight: 600;
 }
 
+.collab-login button.text-link {
+  justify-self: center;
+  margin: -8px 0 0;
+}
+
+button.text-link {
+  appearance: none;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wine);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+button.text-link:hover {
+  background: rgba(212, 34, 88, 0.08);
+  color: var(--wine);
+}
+
+button.text-link:focus-visible {
+  outline: 3px solid rgba(255, 64, 129, 0.32);
+  outline-offset: 2px;
+}
+
 .feature-quote {
   padding-bottom: 70px;
 }
