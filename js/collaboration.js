@@ -36,6 +36,7 @@
       'auth/invalid-login-credentials': 'Email ou palavra-passe incorretos. Confirma que esta conta existe em Firebase Console → Authentication → Users no projeto adriana-site.',
       'auth/user-not-found': 'Não existe uma conta Firebase com este email.',
       'auth/wrong-password': 'Email ou palavra-passe incorretos.',
+      'auth/operation-not-allowed': 'O método Email/Password não está ativado em Firebase Authentication → Método de login.',
       'auth/too-many-requests': 'Muitas tentativas. Aguarda um pouco e tenta novamente.',
       'auth/network-request-failed': 'Sem ligação ao Firebase. Verifica a internet e tenta novamente.'
     };
@@ -154,6 +155,7 @@
             <strong data-passion-percent></strong>
           </div>
           <button class="primary-btn" type="submit">Entrar</button>
+          <button class="text-link" type="button" data-password-reset>Esqueci-me da palavra-passe</button>
           <button class="text-link" type="button" data-login-sign-out hidden>Terminar sessão</button>
         </form>
       </section>
@@ -163,6 +165,31 @@
   function configureLogin(form, notice) {
     if (!form || form.dataset.bound === 'true') return;
     form.dataset.bound = 'true';
+    form.querySelector('[data-password-reset]').addEventListener('click', async () => {
+      const emailInput = form.elements.email;
+      const email = emailInput.value.trim();
+      if (!email || !emailInput.checkValidity()) {
+        showNotice(notice, 'Introduz primeiro um endereço de email válido para receber a reposição.', true);
+        emailInput.focus();
+        return;
+      }
+
+      try {
+        const auth = await window.FirebaseReady;
+        if (!auth) throw window.FirebaseError || new Error('O Firebase não foi inicializado.');
+        await auth.sendPasswordResetEmail(email);
+        showNotice(notice, 'Se existir uma conta com esse email, receberás uma mensagem para repor a palavra-passe. Verifica também o spam.');
+      } catch (error) {
+        console.error('Password reset request failed:', error);
+        const messages = {
+          'auth/invalid-email': 'O formato do email não é válido.',
+          'auth/too-many-requests': 'Muitas tentativas. Aguarda um pouco e tenta novamente.',
+          'auth/network-request-failed': 'Sem ligação ao Firebase. Verifica a internet e tenta novamente.',
+          'auth/operation-not-allowed': 'O método Email/Password não está ativado em Firebase Authentication → Método de login.'
+        };
+        showNotice(notice, messages[error?.code] || userFacingError(error, 'Não foi possível pedir a reposição. Tenta novamente.'), true);
+      }
+    });
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const button = form.querySelector('[type="submit"]');
