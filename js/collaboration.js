@@ -263,13 +263,6 @@
       ${loginMarkup()}
       <section class="page-content chat-area" data-chat-area hidden>
         <div class="container chat-shell glass-panel">
-          <header class="chat-heading">
-            <button class="chat-sign-out" type="button" data-sign-out aria-label="Terminar sessão" title="Terminar sessão">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M10 17l5-5-5-5M15 12H3m9-8h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6" />
-              </svg>
-            </button>
-          </header>
           <p class="collab-notice" data-chat-notice role="status" hidden></p>
           <ol class="chat-messages" data-chat-messages aria-live="polite"></ol>
           <form class="chat-compose" data-chat-form>
@@ -286,7 +279,7 @@
     window.Interactions.refreshReveals();
     configureLogin(app.querySelector('[data-login-form]'), app.querySelector('[data-login-notice]'));
     app.querySelector('[data-login-sign-out]').addEventListener('click', signOut);
-    app.querySelector('[data-sign-out]').addEventListener('click', signOut);
+    document.querySelector('.site-header [data-sign-out]').addEventListener('click', signOut);
     app.querySelector('[data-chat-form]').addEventListener('submit', sendChatMessage);
     app.querySelector('[data-chat-messages]').addEventListener('click', handleLightboxClick);
     if (!document.querySelector('[data-image-lightbox]')) {
@@ -828,11 +821,14 @@
     const login = document.querySelector('#app [data-login-form]');
     const loginSignOut = document.querySelector('#app [data-login-sign-out]');
     const area = document.querySelector('[data-chat-area]');
+    const signOutButton = document.querySelector('.site-header [data-sign-out]');
     const loginSection = login && login.closest('.page-content');
     if (login) login.hidden = allowed;
     if (loginSection) loginSection.hidden = allowed;
     if (loginSignOut) loginSignOut.hidden = !state.user;
+    if (signOutButton) signOutButton.hidden = !allowed;
     if (area) area.hidden = !allowed;
+    document.body.classList.toggle('chat-active', allowed);
     if (allowed) {
       loadChat();
       startChatPolling();
