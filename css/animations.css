@@ -40,3 +40,10 @@
   0%, 100% { box-shadow: 0 12px 30px rgba(194, 24, 91, 0.3); }
   50% { box-shadow: 0 12px 38px rgba(194, 24, 91, 0.48), 0 0 0 8px rgba(255, 64, 129, 0.08); }
 }
+
+@keyframes floating-heart-zoom {
+  0%, 100% { transform: scale(1); }
+  28% { transform: scale(1.12); }
+  46% { transform: scale(1.28); }
+  62% { transform: scale(1.04); }
+}

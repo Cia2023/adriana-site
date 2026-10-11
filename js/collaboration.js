@@ -811,7 +811,9 @@
     const login = document.querySelector('#app [data-login-form]');
     const loginSignOut = document.querySelector('#app [data-login-sign-out]');
     const area = document.querySelector('[data-chat-area]');
+    const loginSection = login && login.closest('.page-content');
     if (login) login.hidden = allowed;
+    if (loginSection) loginSection.hidden = allowed;
     if (loginSignOut) loginSignOut.hidden = !state.user;
     if (area) area.hidden = !allowed;
     if (allowed) {
