@@ -254,7 +254,7 @@
         <div class="container narrow glass-panel chat-welcome-panel reveal">
           <span class="section-kicker">Um espaço teu</span>
           <h1>Podes voltar aqui todos os dias</h1>
-          <p>Podes desabafar, chorar ou simplesmente ficar em silêncio — sem medo e sem julgamentos. Quero que saibas que estarei aqui, todos os dias.</p>
+          <p>Podes escrever uma mensagem ou anexar uma fotografia. Se preferires, também podes partilhar fotografias na <a href="../pages/galeria.html">Galeria</a> ou vídeos e áudios na <a href="../pages/biblioteca.html">Biblioteca</a>.</p>
         </div>
       </section>
       ${loginMarkup()}
@@ -291,10 +291,11 @@
     const section = document.createElement('section');
     section.className = 'page-content gallery-collab';
     section.dataset.galleryTools = '';
+    section.id = 'gallery-contributions';
     section.innerHTML = `
       <div class="container glass-panel gallery-collab-panel">
         <div class="gallery-collab-heading">
-          <div><span class="section-kicker">Galeria</span><h2>Partilha uma fotografia</h2></div>
+          <div><span class="section-kicker">Galeria</span><h2>Partilha uma fotografia</h2><p>Podes escolher um ficheiro ou colar um link para a imagem.</p></div>
           <div class="gallery-actions">
             <button class="primary-btn" type="button" data-open-gallery-form>Adicionar foto à galeria</button>
             <button class="text-link" type="button" data-gallery-sign-out hidden>Terminar sessão</button>
@@ -356,10 +357,11 @@
     const section = document.createElement('section');
     section.className = 'page-content gallery-collab';
     section.dataset.mediaTools = '';
+    section.id = 'library-contributions';
     section.innerHTML = `
       <div class="container glass-panel gallery-collab-panel">
         <div class="gallery-collab-heading">
-          <div><span class="section-kicker">Biblioteca</span><h2>Partilha um vídeo ou áudio</h2></div>
+          <div><span class="section-kicker">Biblioteca</span><h2>Partilha um vídeo ou áudio</h2><p>Cola um link completo TikTok, YouTube ou Vimeo, ou carrega um ficheiro. Links curtos do TikTok abrem no TikTok.</p></div>
           <div class="gallery-actions">
             <button class="primary-btn" type="button" data-open-media-form>Adicionar conteúdo</button>
             <button class="text-link" type="button" data-media-sign-out hidden>Terminar sessão</button>
@@ -379,8 +381,8 @@
           <label>Título<input name="title" maxlength="120" required /></label>
           <label>Descrição<textarea name="caption" rows="2" maxlength="500"></textarea></label>
           <label>Categoria<input name="category" maxlength="60" required /></label>
-          <label data-media-url-label>Link hospedado (opcional)<input name="mediaUrl" type="url" inputmode="url" placeholder="https://…" /></label>
-          <label data-media-file-label>Ou escolhe um ficheiro<input name="mediaFile" type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime" /></label>
+          <label data-media-url-label><span data-media-url-copy>Link do vídeo (TikTok, YouTube ou Vimeo)</span><input name="mediaUrl" type="url" inputmode="url" placeholder="https://www.tiktok.com/@.../video/..." /></label>
+          <label data-media-file-label><span data-media-file-copy>Ou carrega um ficheiro de vídeo</span><input name="mediaFile" type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime" /></label>
           <p class="collab-notice" data-media-upload-notice role="status" hidden></p>
           <div class="form-actions">
             <button class="primary-btn" type="submit">Publicar na biblioteca</button>
@@ -411,8 +413,23 @@
     section.querySelector('[name="mediaType"]').addEventListener('change', (event) => {
       const mediaType = event.target.value;
       const isEbook = mediaType === 'ebook';
+      const isAudio = mediaType === 'audio';
+      const urlInput = section.querySelector('[data-media-url-label] input');
       section.querySelector('[data-media-file-label]').hidden = isEbook;
-      section.querySelector('[data-media-url-label] input').required = isEbook;
+      urlInput.required = isEbook;
+      section.querySelector('[data-media-url-copy]').textContent = isEbook
+        ? 'Link direto para o PDF'
+        : isAudio
+          ? 'Link direto para o áudio'
+          : 'Link do vídeo (TikTok, YouTube ou Vimeo)';
+      urlInput.placeholder = isEbook
+        ? 'https://…/livro.pdf'
+        : isAudio
+          ? 'https://…/audio.mp3'
+          : 'https://www.tiktok.com/@.../video/...';
+      section.querySelector('[data-media-file-copy]').textContent = isAudio
+        ? 'Ou carrega um ficheiro de áudio'
+        : 'Ou carrega um ficheiro de vídeo';
       if (isEbook) section.querySelector('[name="mediaFile"]').value = '';
       section.querySelector('[name="mediaFile"]').accept = mediaType === 'audio'
         ? 'audio/mpeg,audio/mp4,audio/aac,audio/ogg,audio/wav,audio/webm'

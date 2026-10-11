@@ -201,6 +201,28 @@
           </div>
         </section>
       ` : ''}
+
+      <section class="page-content share-invitation reveal">
+        <div class="container glass-panel share-content-panel">
+          <span class="section-kicker">Também podes participar</span>
+          <h2>Queres partilhar alguma coisa?</h2>
+          <p>Se te apetecer, podes deixar uma mensagem, partilhar uma fotografia ou adicionar um vídeo ou áudio. Escolhe o espaço que preferires.</p>
+          <div class="share-content-options">
+            <a class="share-content-option" href="${escapeHtml(safeUrl('pages/chat.html'))}">
+              <strong>Conversar no chat</strong>
+              <span>Escreve uma mensagem ou anexa uma fotografia.</span>
+            </a>
+            <a class="share-content-option" href="${escapeHtml(safeUrl(config.pageConfig.galeria))}">
+              <strong>Partilhar uma fotografia</strong>
+              <span>Adiciona uma imagem e, se quiseres, uma legenda.</span>
+            </a>
+            <a class="share-content-option" href="${escapeHtml(safeUrl(config.pageConfig.biblioteca))}">
+              <strong>Adicionar à Biblioteca</strong>
+              <span>Partilha um link TikTok ou carrega um vídeo ou áudio.</span>
+            </a>
+          </div>
+        </div>
+      </section>
     `;
   }
 
@@ -249,6 +271,8 @@
         <div class="container narrow">
           <span class="section-kicker">Galeria</span>
           <h1>${escapeHtml(getPageLabel('galeria'))}</h1>
+          <p>Podes adicionar as tuas fotografias e uma legenda. Para partilhar um vídeo, visita a Biblioteca.</p>
+          <a class="text-link contribution-jump" href="#gallery-contributions">Partilhar uma fotografia</a>
         </div>
       </section>
       <section class="page-content reveal">
@@ -280,6 +304,11 @@
     if (!safe) return '';
     try {
       const url = new URL(safe);
+      if (/(^|\.)tiktok\.com$/i.test(url.hostname)) {
+        const id = url.pathname.match(/^\/@[^/]+\/video\/(\d+)/)?.[1] ||
+          url.pathname.match(/^\/(?:player\/v1|embed\/v2)\/(\d+)/)?.[1];
+        return id ? `https://www.tiktok.com/player/v1/${encodeURIComponent(id)}?controls=1&description=1` : '';
+      }
       if (url.hostname === 'youtu.be') {
         const id = url.pathname.split('/').filter(Boolean)[0];
         return id ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}` : '';
@@ -299,6 +328,28 @@
     return '';
   }
 
+  function isDirectVideoUrl(value) {
+    const safe = safeUrl(value);
+    if (!safe) return false;
+    try {
+      const url = new URL(safe);
+      return /\/video\/upload\//i.test(url.pathname) ||
+        /\.(?:mp4|m4v|mov|webm|ogv)$/i.test(url.pathname);
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function isTikTokUrl(value) {
+    const safe = safeUrl(value);
+    if (!safe) return false;
+    try {
+      return /(^|\.)tiktok\.com$/i.test(new URL(safe).hostname);
+    } catch (error) {
+      return false;
+    }
+  }
+
   function renderMediaItem(item) {
     const type = String(item.tipo || '').trim().toLowerCase();
     const title = escapeHtml(item.titulo || 'Conteúdo');
@@ -310,9 +361,12 @@
     if (['video', 'vídeo', 'videos', 'vídeos'].includes(type)) {
       const embed = videoEmbedUrl(mediaUrl);
       if (embed) {
-        player = `<div class="media-player media-video"><iframe src="${escapeHtml(embed)}" title="${title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
-      } else if (mediaUrl) {
+        player = `<div class="media-player media-video${isTikTokUrl(mediaUrl) ? ' media-tiktok-video' : ''}"><iframe src="${escapeHtml(embed)}" title="${title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+      } else if (mediaUrl && isDirectVideoUrl(mediaUrl)) {
         player = `<div class="media-player media-video"><video controls playsinline preload="metadata"${cover ? ` poster="${escapeHtml(cloudinaryUrl(cover, 900))}"` : ''}><source src="${escapeHtml(mediaUrl)}" /></video></div>`;
+      } else if (mediaUrl) {
+        const isTikTok = isTikTokUrl(mediaUrl);
+        player = `<div class="media-link-player"><p>${isTikTok ? 'Este link abre o vídeo no TikTok.' : 'Este formato abre no site onde o vídeo está publicado.'}</p><a class="primary-btn media-open" href="${escapeHtml(mediaUrl)}" target="_blank" rel="noopener noreferrer">${isTikTok ? 'Ver no TikTok' : 'Abrir vídeo'}</a></div>`;
       }
     } else if (['audio', 'áudio', 'audios', 'áudios'].includes(type) && mediaUrl) {
       player = `${cover ? imageMarkup(cover, item.titulo, 700, 'lazy', 'media-cover') : ''}<audio controls preload="metadata"><source src="${escapeHtml(mediaUrl)}" /></audio>`;
@@ -328,6 +382,7 @@
           ${item.categoria ? `<span class="tag">${escapeHtml(item.categoria)}</span>` : ''}
           <h2>${title}</h2>
           ${description ? `<p>${escapeHtml(description)}</p>` : ''}
+          ${isTikTokUrl(mediaUrl) && videoEmbedUrl(mediaUrl) ? `<a class="text-link" href="${escapeHtml(mediaUrl)}" target="_blank" rel="noopener noreferrer">Se o vídeo não carregar, abrir no TikTok</a>` : ''}
         </div>
       </article>
     `;
@@ -341,7 +396,8 @@
         <div class="container narrow">
           <span class="section-kicker">Vídeos, áudios e leituras</span>
           <h1>Biblioteca</h1>
-          <p>Um espaço para ver, ouvir e descobrir.</p>
+          <p>Um espaço para ver, ouvir e descobrir. Também podes partilhar um link TikTok ou carregar um vídeo, áudio ou e-book.</p>
+          <a class="text-link contribution-jump" href="#library-contributions">Adicionar conteúdo à Biblioteca</a>
         </div>
       </section>
       <section class="page-content reveal">

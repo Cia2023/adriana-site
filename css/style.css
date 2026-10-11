@@ -350,6 +350,79 @@ button.text-link:focus-visible {
   color: var(--wine);
 }
 
+.share-invitation {
+  padding-top: 12px;
+}
+
+.share-content-panel {
+  display: grid;
+  gap: 14px;
+  padding: clamp(22px, 5vw, 42px);
+  border: 1px solid rgba(117, 33, 60, 0.1);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.share-content-panel h2 {
+  margin: 0;
+  color: var(--wine);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+}
+
+.share-content-panel > p {
+  max-width: 720px;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.share-content-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.share-content-option {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(117, 33, 60, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--ink);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.share-content-option strong {
+  color: var(--wine);
+}
+
+.share-content-option span {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.share-content-option:hover,
+.share-content-option:focus-visible {
+  border-color: var(--rose);
+  box-shadow: 0 12px 26px rgba(194, 24, 91, 0.12);
+  transform: translateY(-3px);
+}
+
+.share-content-option:focus-visible,
+.contribution-jump:focus-visible {
+  outline: 3px solid rgba(255, 64, 129, 0.4);
+  outline-offset: 3px;
+}
+
+.contribution-jump {
+  display: inline-block;
+  scroll-margin-top: 24px;
+}
+
 .page-header {
   padding: 58px 0 22px;
   text-align: center;
@@ -1177,6 +1250,12 @@ body {
   gap: 20px;
 }
 
+.gallery-collab-heading > div > p {
+  margin: 8px 0 0;
+  color: rgba(31, 31, 46, 0.75);
+  line-height: 1.6;
+}
+
 .chat-heading h1 {
   margin: 6px 0 0;
   color: var(--wine);
@@ -1828,8 +1907,34 @@ main,
   background: #21151b;
 }
 
+.media-link-player {
+  display: grid;
+  min-height: 190px;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(117, 33, 60, 0.08), rgba(212, 34, 88, 0.12));
+  text-align: center;
+}
+
+.media-link-player p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.media-link-player .media-open {
+  justify-self: center;
+}
+
 .media-video {
   aspect-ratio: 16 / 9;
+}
+
+.media-video.media-tiktok-video {
+  width: min(100%, 420px, calc(80vh * 9 / 16));
+  aspect-ratio: 9 / 16;
+  margin-inline: auto;
 }
 
 .media-video iframe,
@@ -1878,6 +1983,14 @@ main,
 }
 
 @media (max-width: 600px) {
+  .share-content-options {
+    grid-template-columns: 1fr;
+  }
+
+  .share-content-option {
+    min-height: 0;
+  }
+
   body {
     padding-bottom: calc(74px + env(safe-area-inset-bottom));
   }
