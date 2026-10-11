@@ -1100,23 +1100,13 @@ body {
 }
 
 .login-processing {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(212, 34, 88, 0.07);
-  color: var(--wine);
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  padding: 12px;
 }
 
 .login-processing[hidden] {
   display: none;
-}
-
-.login-processing strong {
-  color: var(--rose);
-  font-size: 0.95rem;
 }
 
 .login-heart {
@@ -1226,6 +1216,19 @@ body {
 .collab-notice.is-error {
   background: #fff0f1;
   color: #8d1835;
+}
+
+.collab-notice.is-loading {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: transparent;
+}
+
+.collab-notice.is-loading .login-heart {
+  flex: 0 0 auto;
 }
 
 .chat-area {

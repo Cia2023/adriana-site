@@ -16,9 +16,24 @@
 
   function showNotice(target, message, isError = false) {
     if (!target) return;
-    target.textContent = message;
+    target.replaceChildren();
+    if (message) target.appendChild(document.createTextNode(message));
     target.classList.toggle('is-error', isError);
+    target.classList.remove('is-loading');
+    target.removeAttribute('aria-label');
     target.hidden = !message;
+  }
+
+  function showLoadingHeart(target) {
+    if (!target) return;
+    const heart = document.createElement('span');
+    heart.className = 'login-heart';
+    heart.setAttribute('aria-hidden', 'true');
+    target.replaceChildren(heart);
+    target.classList.remove('is-error');
+    target.classList.add('is-loading');
+    target.setAttribute('aria-label', 'A carregar');
+    target.hidden = false;
   }
 
   function userFacingError(error, fallback) {
@@ -155,10 +170,8 @@
           <label>Email<input name="email" type="email" autocomplete="username" required maxlength="254" /></label>
           <label>Palavra-passe<input name="password" type="password" autocomplete="current-password" required maxlength="256" /></label>
           <p class="collab-notice" data-login-notice role="status" hidden></p>
-          <div class="login-processing" data-login-processing role="status" aria-live="polite" hidden>
+          <div class="login-processing" data-login-processing role="status" aria-label="A processar entrada" hidden>
             <span class="login-heart" aria-hidden="true"></span>
-            <span>A preparar este cantinho com carinho…</span>
-            <strong data-passion-percent></strong>
           </div>
           <button class="primary-btn" type="submit">Entrar</button>
           <button class="text-link" type="button" data-password-reset>Esqueci-me da palavra-passe</button>
@@ -201,13 +214,10 @@
       const button = form.querySelector('[type="submit"]');
       const processing = form.querySelector('[data-login-processing]');
       const previousButtonText = button.textContent;
-      const passionPercent = Math.floor(Math.random() * 41) + 60;
       button.disabled = true;
-      button.textContent = 'A entrar…';
       form.setAttribute('aria-busy', 'true');
-      processing.querySelector('[data-passion-percent]').textContent = `Paixão de hoje: ${passionPercent}%`;
       processing.hidden = false;
-      showNotice(notice, 'A validar os dados de acesso…');
+      showNotice(notice, '');
       try {
         const auth = await window.FirebaseReady;
         if (!auth) throw window.FirebaseError || new Error('O Firebase não foi inicializado.');
@@ -470,7 +480,7 @@
       return;
     }
     state.chatLoading = true;
-    if (!quiet) showNotice(notice, 'A carregar o histórico…');
+    if (!quiet) showLoadingHeart(notice);
     try {
       const records = await apiRequest({ action: 'chatList', token: state.token });
       const wasAtBottom = messages.scrollHeight - messages.scrollTop - messages.clientHeight < 80;
