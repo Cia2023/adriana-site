@@ -280,7 +280,7 @@
             <label class="file-pick" for="chat-image" aria-label="Anexar fotografia" title="Anexar fotografia"><span aria-hidden="true">＋</span><span class="visually-hidden">Anexar fotografia</span></label>
             <input id="chat-image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
             <label class="visually-hidden" for="chat-text">Escreve uma mensagem</label>
-            <textarea id="chat-text" name="text" rows="2" maxlength="2000" placeholder="Escreve uma mensagem…" aria-label="Escreve uma mensagem"></textarea>
+            <textarea id="chat-text" name="text" rows="1" maxlength="2000" placeholder="Escreve uma mensagem…" aria-label="Escreve uma mensagem"></textarea>
             <button class="primary-btn chat-send-button" type="submit" aria-label="Enviar mensagem" title="Enviar mensagem"><span aria-hidden="true">↑</span></button>
           </form>
         </div>

@@ -1358,7 +1358,8 @@ body {
   width: 100%;
   min-height: 44px;
   max-height: 160px;
-  padding: 11px 4px;
+  padding: 8px 4px;
+  line-height: 1.5;
   resize: none;
   overflow-y: auto;
   border: 0;
@@ -2064,9 +2065,11 @@ main,
 
 @media (max-width: 600px) {
   .chat-compose {
+    bottom: 0;
     grid-template-columns: 40px minmax(0, 1fr) 44px;
     gap: 8px;
     padding: 8px;
+    transform: translateY(calc(-74px - env(safe-area-inset-bottom)));
   }
 
   .chat-compose .file-pick {
