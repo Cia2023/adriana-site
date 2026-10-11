@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/style.css?v=chat-navigation-header-20261011" />
+    <link rel="stylesheet" href="../css/style.css?v=chat-collapsible-navigation-20261011" />
     <link rel="stylesheet" href="../css/animations.css?v=login-copy-20261011-1235" />
   </head>
   <body data-page="chat">
@@ -19,13 +19,27 @@
       <div class="container nav-container">
         <a class="brand" href="../index.html">Adriana Pedro</a>
         <nav id="site-nav" class="site-nav" aria-label="Menu de navegação"></nav>
-        <button class="chat-sign-out" type="button" data-sign-out aria-label="Terminar sessão" title="Terminar sessão" hidden>
+        <button class="chat-menu-toggle" type="button" data-chat-menu-toggle aria-label="Abrir navegação e opções" aria-haspopup="dialog" aria-controls="chat-menu-dialog" aria-expanded="false" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M10 17l5-5-5-5M15 12H3m9-8h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6" />
+            <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
     </header>
+
+    <dialog class="chat-menu-dialog" id="chat-menu-dialog" aria-label="Navegação e opções do chat">
+      <div class="chat-menu-heading">
+        <strong>Navegação</strong>
+        <button type="button" data-chat-menu-close aria-label="Fechar menu">×</button>
+      </div>
+      <nav class="chat-menu-links" data-chat-menu-links aria-label="Navegação principal"></nav>
+      <button class="chat-menu-sign-out" type="button" data-sign-out>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M10 17l5-5-5-5M15 12H3m9-8h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6" />
+        </svg>
+        Terminar sessão
+      </button>
+    </dialog>
 
     <main id="app"></main>
 
@@ -35,7 +49,7 @@
     <script src="../js/navigation.js"></script>
     <script src="../js/render.js?v=chat-composer-20261011"></script>
     <script src="../js/interactions.js?v=login-copy-20261011-1235"></script>
-    <script src="../js/collaboration.js?v=chat-navigation-header-20261011"></script>
+    <script src="../js/collaboration.js?v=chat-collapsible-navigation-20261011"></script>
     <script src="../js/firebase-init.js"></script>
     <script src="../js/main.js"></script>
   </body>

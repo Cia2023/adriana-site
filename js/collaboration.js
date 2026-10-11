@@ -279,12 +279,85 @@
     window.Interactions.refreshReveals();
     configureLogin(app.querySelector('[data-login-form]'), app.querySelector('[data-login-notice]'));
     app.querySelector('[data-login-sign-out]').addEventListener('click', signOut);
-    document.querySelector('.site-header [data-sign-out]').addEventListener('click', signOut);
+    document.querySelector('.chat-menu-toggle').addEventListener('click', openChatMenu);
+    document.querySelector('[data-chat-menu-close]').addEventListener('click', closeChatMenu);
+    document.querySelector('.chat-menu-dialog [data-sign-out]').addEventListener('click', () => {
+      document.querySelector('#chat-menu-dialog').close();
+      document.querySelector('.chat-menu-toggle').setAttribute('aria-expanded', 'false');
+      signOut();
+    });
     app.querySelector('[data-chat-form]').addEventListener('submit', sendChatMessage);
     app.querySelector('[data-chat-messages]').addEventListener('click', handleLightboxClick);
     if (!document.querySelector('[data-image-lightbox]')) {
       createLightbox('chat-image-lightbox', 'Fotografia da conversa');
     }
+  }
+
+  function openChatMenu() {
+    const dialog = document.querySelector('#chat-menu-dialog');
+    const links = document.querySelector('#site-nav');
+    const menuLinks = document.querySelector('[data-chat-menu-links]');
+    if (!dialog || !links || !menuLinks) return;
+    const availableLinks = Array.from(links.children, (link) => link.cloneNode(true));
+    if (!availableLinks.length) {
+      const menuItems = window.Sheets?.getData('menu') || window.APP_CONFIG.fallbackData.menu || [];
+      const root = new URL('../', window.location.href);
+      const uniquePaths = new Set();
+      menuItems
+        .filter((item) => item.ativo !== false && String(item.ativo) !== 'false')
+        .sort((a, b) => Number(a.ordem || 999) - Number(b.ordem || 999))
+        .forEach((item) => {
+          const path = String(item.caminho || item.path || item.url || item.pagina || '').trim();
+          if (!path) return;
+          let destination;
+          try {
+            destination = new URL(window.Navigation.resolveLink(path) || path, root);
+          } catch (error) {
+            return;
+          }
+          if (destination.origin !== root.origin || !['https:', 'http:', 'file:'].includes(destination.protocol)) return;
+          const href = destination.href;
+          if (!href || uniquePaths.has(href)) return;
+          uniquePaths.add(href);
+          const link = document.createElement('a');
+          link.href = href;
+          link.className = 'nav-link';
+          link.textContent = item.titulo || item.title || '';
+          if (new URL(href).pathname === window.location.pathname) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+          }
+          availableLinks.push(link);
+        });
+      const libraryPath = window.APP_CONFIG.pageConfig.biblioteca;
+      const libraryUrl = new URL(window.Navigation.resolveLink(libraryPath) || libraryPath, root).href;
+      if (libraryUrl && !uniquePaths.has(libraryUrl)) {
+        const libraryLink = document.createElement('a');
+        libraryLink.href = libraryUrl;
+        libraryLink.className = 'nav-link';
+        libraryLink.textContent = 'Biblioteca';
+        availableLinks.push(libraryLink);
+      }
+      const chatLink = document.createElement('a');
+      chatLink.href = new URL('pages/chat.html', root).href;
+      chatLink.className = 'nav-link active';
+      chatLink.setAttribute('aria-current', 'page');
+      chatLink.textContent = 'Chat privado';
+      availableLinks.push(chatLink);
+    }
+    menuLinks.replaceChildren(...availableLinks);
+    document.querySelector('.chat-menu-toggle').setAttribute('aria-expanded', 'true');
+    dialog.showModal();
+    dialog.querySelector('[data-chat-menu-close]').focus();
+  }
+
+  function closeChatMenu() {
+    const dialog = document.querySelector('#chat-menu-dialog');
+    if (!dialog) return;
+    dialog.close();
+    const toggle = document.querySelector('.chat-menu-toggle');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
   }
 
   function renderGalleryTools() {
@@ -821,12 +894,12 @@
     const login = document.querySelector('#app [data-login-form]');
     const loginSignOut = document.querySelector('#app [data-login-sign-out]');
     const area = document.querySelector('[data-chat-area]');
-    const signOutButton = document.querySelector('.site-header [data-sign-out]');
+    const menuToggle = document.querySelector('.chat-menu-toggle');
     const loginSection = login && login.closest('.page-content');
     if (login) login.hidden = allowed;
     if (loginSection) loginSection.hidden = allowed;
     if (loginSignOut) loginSignOut.hidden = !state.user;
-    if (signOutButton) signOutButton.hidden = !allowed;
+    if (menuToggle) menuToggle.hidden = !allowed;
     if (area) area.hidden = !allowed;
     document.body.classList.toggle('chat-active', allowed);
     if (allowed) {
