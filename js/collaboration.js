@@ -660,10 +660,19 @@
     try {
       showNotice(notice, file ? 'A carregar a imagem e a enviar…' : 'A enviar mensagem…');
       const imageUrl = file ? await uploadCloudinaryImage(file, 'chat') : '';
-      await apiRequest({ action: 'chatSend', token: state.token, text, imageUrl });
+      const result = await apiRequest({ action: 'chatSend', token: state.token, text, imageUrl });
       form.reset();
       await loadChat();
-      showNotice(notice, 'Mensagem enviada.');
+      const notificationStatus = result.notifications?.status;
+      if (notificationStatus === 'failed' || notificationStatus === 'partial') {
+        showNotice(notice, 'Mensagem enviada, mas houve uma falha no aviso por email.');
+      } else if (notificationStatus === 'no_recipients') {
+        showNotice(notice, 'Mensagem enviada, mas não há outros endereços ativos na aba Notificacoes.');
+      } else if (notificationStatus === 'sent') {
+        showNotice(notice, 'Mensagem enviada.');
+      } else {
+        showNotice(notice, 'Mensagem enviada, mas não foi possível confirmar o envio do aviso por email.');
+      }
     } catch (error) {
       console.error('Could not send chat message:', error);
       showNotice(notice, userFacingError(error, 'Não foi possível enviar a mensagem agora.'), true);
