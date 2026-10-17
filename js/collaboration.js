@@ -729,7 +729,7 @@
     button.disabled = true;
     showNotice(notice, 'A publicar fotografia…');
     try {
-      await apiRequest({
+      const result = await apiRequest({
         action: 'gallerySubmit',
         token: state.token,
         title,
@@ -743,7 +743,10 @@
       form.reset();
       form.hidden = true;
       await loadGallery();
-      showNotice(document.querySelector('[data-gallery-notice]'), 'Fotografia adicionada à galeria.');
+      showNotice(
+        document.querySelector('[data-gallery-notice]'),
+        publicationNoticeMessage('Fotografia adicionada à galeria.', result.notifications)
+      );
     } catch (error) {
       console.error('Could not save gallery contribution:', error);
       showNotice(notice, userFacingError(error, 'Não foi possível publicar esta fotografia.'), true);
@@ -787,7 +790,7 @@
       const mediaUrl = file
         ? await uploadCloudinaryFile(file, 'library', mediaType)
         : hostedUrl;
-      await apiRequest({
+      const result = await apiRequest({
         action: 'mediaSubmit',
         token: state.token,
         mediaType,
@@ -799,13 +802,28 @@
       form.reset();
       form.hidden = true;
       await loadMedia();
-      showNotice(document.querySelector('[data-media-notice]'), 'Conteúdo adicionado à biblioteca.');
+      showNotice(
+        document.querySelector('[data-media-notice]'),
+        publicationNoticeMessage('Conteúdo adicionado à biblioteca.', result.notifications)
+      );
     } catch (error) {
       console.error('Could not publish library media:', error);
       showNotice(notice, userFacingError(error, 'Não foi possível publicar este conteúdo.'), true);
     } finally {
       button.disabled = false;
     }
+  }
+
+  function publicationNoticeMessage(successMessage, notifications) {
+    if (notifications?.status === 'sent') return `${successMessage} O aviso por email foi enviado.`;
+    if (notifications?.status === 'no_recipients') {
+      return `${successMessage} Não há outros endereços ativos na aba Notificacoes.`;
+    }
+    if (notifications?.status === 'failed' || notifications?.status === 'partial') {
+      const detail = notifications.failures?.[0];
+      return `${successMessage} Houve uma falha no aviso por email${detail ? ` (${detail})` : ''}.`;
+    }
+    return `${successMessage} Não foi possível confirmar o envio do aviso por email.`;
   }
 
   function submittedGalleryMarkup(item) {
