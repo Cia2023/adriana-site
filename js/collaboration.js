@@ -665,7 +665,8 @@
       await loadChat();
       const notificationStatus = result.notifications?.status;
       if (notificationStatus === 'failed' || notificationStatus === 'partial') {
-        showNotice(notice, 'Mensagem enviada, mas houve uma falha no aviso por email.');
+        const detail = result.notifications.failures?.[0];
+        showNotice(notice, `Mensagem enviada, mas houve uma falha no aviso por email${detail ? ` (${detail})` : ''}.`);
       } else if (notificationStatus === 'no_recipients') {
         showNotice(notice, 'Mensagem enviada, mas não há outros endereços ativos na aba Notificacoes.');
       } else if (notificationStatus === 'sent') {
